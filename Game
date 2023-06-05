@@ -71,7 +71,11 @@ public class Main{
 
                     //asking user if they accept the points
                     System.out.println("Do you accept these points?");
-                    String choice = in.next();
+                    String choice = in.next().toLowerCase();
+                    while(! choice.equals("no") && ! choice.equals("yes")){
+                        System.out.println("Error, please enter yes or no");
+                        choice = in.next().toLowerCase();
+                    }
                     if(choice.equals("no")){
                         skip[i] = 1;
                     }
@@ -173,7 +177,11 @@ public class Main{
         for(int i = 0; i < 3; i ++){
             //user chooses
             System.out.print("\nDo you choose rock, paper or scissors: ");
-            String user = in.next();
+            String user = in.next().toLowerCase();
+            while(! user.equals("rock") && ! user.equals("paper") && ! user.equals("scissors")){
+                System.out.print("\nError, please enter rock, paper or scissors: ");
+                user = in.next().toLowerCase();
+            }
             int userchoice = 0;
             //opponent chooses
             int aichoice = (int)(Math.random() * 3);
