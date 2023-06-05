@@ -55,8 +55,12 @@ public class Main{
                     System.out.println("\n" + names[i] + "'s turn");
 
                     //rolling the dice
-                    System.out.println("Click enter to roll the dice");
-                    in.nextLine();
+                    System.out.println("Enter 'roll' to roll the dice then click enter");
+                    String userrolls = in.next().toLowerCase();
+                    while(! userrolls.equals("roll")){
+                        System.out.println("Error, enter roll then click enter");
+                        userrolls = in.next().toLowerCase();
+                    }
                     int diceValue = rollDice();
                     System.out.println("Dice: " + diceValue);
 
@@ -77,17 +81,19 @@ public class Main{
                     System.out.println("Score: " + (score[i] + points));
 
                     //asking user if they accept the points
-                    System.out.println("Do you accept these points?");
-                    String choice = in.next().toLowerCase();
-                    while(! choice.equals("no") && ! choice.equals("yes")){
-                        System.out.println("Error, please enter yes or no");
-                        choice = in.next().toLowerCase();
-                    }
-                    if(choice.equals("no")){
-                        skip[i] = 1;
-                    }
-                    else if(choice.equals("yes")){
-                        score[i] += points;
+                    if(points < 0){
+                        System.out.println("Do you accept these points?");
+                        String choice = in.next().toLowerCase();
+                        while(! choice.equals("no") && ! choice.equals("yes")){
+                            System.out.println("Error, please enter yes or no");
+                            choice = in.next().toLowerCase();
+                        }
+                        if(choice.equals("no")){
+                            skip[i] = 1;
+                        }
+                        else if(choice.equals("yes")){
+                            score[i] += points;
+                        }
                     }
                 }
                 //If user skipped their turn, this allows them to continue playing after the skipped turn
@@ -125,10 +131,10 @@ public class Main{
             scoring = 2;
         }
         else if(pos == 8 || pos == 13){
-            scoring = 0;
+            scoring = 3;
         }
         else if(pos == 5 || pos == 15){
-            scoring = -2;
+            scoring = -1;
         }
         else if(pos == 4 || pos == 14){
             System.out.println("\nYou've landed on a magical square");
