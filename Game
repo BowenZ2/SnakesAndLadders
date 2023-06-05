@@ -1,0 +1,203 @@
+import java.util.Scanner;
+//snakes and ladders game
+public class Main{
+
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        //prints instructions
+        System.out.println("Welcome to Snakes and Ladders");
+        System.out.println("\nINSTRUCTIONS");
+        System.out.println("1. There are 16 tiles in this game, 2 snakes, 2 ladders & 2 magical tiles");
+        System.out.println("2. Each round you will click enter to roll the dice then you will move forward accordingly");
+        System.out.println("3. Each no snake/ladder tiles will give you a certain amount of points");
+        System.out.println("4. You may choose if you accept those points or not by typing yes or no, if you type no your next turn will be skipped");
+        System.out.println("5. When you reach tile 16, your turns are over and you must wait for the other players to finish");
+        System.out.println("6. The player with the most points by the end of the game wins");
+        System.out.println("GOOD LUCK AND HAVE FUN!\n");
+
+        //Initializing players
+        int playernum = 0;
+        while(playernum < 2 || playernum > 4){
+            System.out.print("Number of Players(2-4): ");
+            playernum = in.nextInt();
+        }
+
+        //Initializing player data
+        String [] names = new String [playernum];
+        int [] pos = new int [playernum];
+        int [] score = new int [playernum];
+        int [] skip = new int [playernum];
+
+        for(int i = 0; i < playernum; i++){
+            pos[i] = 0;
+            score[i] = 0;
+            skip[i] = 0;
+            System.out.println("Player " + (i+1) + " enter your name: ");
+            names[i] = in.next();
+        }
+
+        //Players will take turn playing in this loop
+        int finishedplayers = 0;
+        for(int i = 0; i < playernum; i++){
+            //checks that player hasn't finished
+            if(pos[i] < 16){
+                //checking that they haven't skipped their turn
+                if(skip[i] == 0){
+
+                    in.nextLine();
+                    System.out.println("\n" + names[i] + "'s turn");
+
+                    //rolling the dice
+                    System.out.println("Click enter to roll the dice");
+                    in.nextLine();
+                    int diceValue = rollDice();
+                    System.out.println("Dice: " + diceValue);
+
+                    //calculating new position
+                    pos[i] += diceValue;
+                    pos[i] = pos[i] + changeinpos(pos[i]);
+
+                    //checking if player has finished
+                    if(pos[i] >= 16){
+                        System.out.println("You reached the finish line, your turns are over");
+                        pos[i] = 16;
+                        finishedplayers++;
+                    }
+
+                    //printing user data
+                    System.out.println("Position: " + pos[i]);
+                    int points = scoring(pos[i]);
+                    System.out.println("Score: " + (score[i] + points));
+
+                    //asking user if they accept the points
+                    System.out.println("Do you accept these points?");
+                    String choice = in.next();
+                    if(choice.equals("no")){
+                        skip[i] = 1;
+                    }
+                    else if(choice.equals("yes")){
+                        score[i] += points;
+                    }
+                }
+                //If user skipped their turn, this allows them to continue playing after the skipped turn
+                else{
+                    skip[i] = 0;
+                }
+
+            }
+            //restarting the loop
+            if(i == playernum - 1){
+                i = -1;
+            }
+            //checking if the game is over
+            if(finishedplayers ==  playernum){
+                break;
+            }
+        }
+        //printing winner
+        System.out.println("\nWINNER: " + names[winner(score)]);
+    }
+
+    //dice rolling function
+    public static int rollDice() {
+        // Generates a number from 1-6 inclusive
+        return (int) (Math.random() * 6) + 1;
+    }
+
+    //calculating score function
+    public static int scoring(int pos){
+        int scoring = 0;
+        if(pos == 1 || pos == 6 || pos == 11 || pos == 16){
+            scoring = 1;
+        }
+        else if(pos == 2 || pos == 12){
+            scoring = 2;
+        }
+        else if(pos == 8 || pos == 13){
+            scoring = 0;
+        }
+        else if(pos == 5 || pos == 15){
+            scoring = -2;
+        }
+        else if(pos == 4 || pos == 14){
+            System.out.println("\nYou've landed on a magical square");
+            scoring = minigame();
+        }
+        System.out.println("Points: " + scoring);
+        return(scoring);
+    }
+
+    //checking for winner function
+    public static int winner(int [] scores){
+        int winner = 0;
+        int maxscore = -10000000;
+        for(int i = 0; i < scores.length; i++){
+            if(scores[i] > maxscore){
+                winner = i;
+                maxscore = scores[i];
+            }
+        }
+        return(winner);
+    }
+
+    //checking for snake or ladder function
+    public static int changeinpos(int pos){
+        int changeinpos = 0;
+        if(pos == 3 || pos == 9){
+            System.out.println("You landed on a ladder! You moved up 3 spaces");
+            changeinpos = 3;
+        }
+        else if(pos == 7 || pos == 10){
+            System.out.println("You landed on a snake! You moved back 2 spaces");
+            changeinpos = -2;
+        }
+        return(changeinpos);
+    }
+
+
+    //minigame function of rock paper scissors
+    public static int minigame(){
+        Scanner in = new Scanner(System.in);
+        int score = 0;
+        //prints instructions
+        System.out.println("Welcome to rock,paper,scissors");
+        System.out.println("\nINSTRUCTIONS");
+        System.out.println("1. You will play 3 rounds");
+        System.out.println("2. Each win you get will give you +2 points");
+        System.out.println("3. Each tie you get will give you +1 points");
+        System.out.println("4. Each loss you get will give you 0 points");
+        System.out.println("GOOD LUCK AND HAVE FUN!");
+        String [] choices = {"rock","scissors","paper"};
+
+        //user will play three rounds in this loop
+        for(int i = 0; i < 3; i ++){
+            //user chooses
+            System.out.print("\nDo you choose rock, paper or scissors: ");
+            String user = in.next();
+            int userchoice = 0;
+            //opponent chooses
+            int aichoice = (int)(Math.random() * 3);
+            String ai = choices[aichoice];
+            System.out.println("Your opponent chose: " + ai);
+            //turns users choice into a number
+            for(int j = 0; j < choices.length; j++) {
+                if (user.equals(choices[j])) {
+                    userchoice = j;
+                }
+            }
+            //checks to see if there is a win, tie or loss and gives points accordingly
+            if(userchoice < 2 && userchoice == aichoice - 1 || userchoice == 2 && aichoice == 0){
+                System.out.println("You won, you received 2 points");
+                score += 2;
+            }
+            else if(userchoice == aichoice){
+                System.out.println("You tied, you received 1 point");
+                score += 1;
+            }
+            else{
+                System.out.println("You lost, you received 0 points");
+            }
+        }
+        return score;
+    }
+}
