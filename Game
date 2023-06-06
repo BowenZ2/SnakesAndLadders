@@ -1,8 +1,21 @@
 import java.util.Scanner;
+import java.awt.Canvas;
+import java.awt.Graphics;
+import javax.swing.JFrame;
+import java.awt.Color;
+import javax.swing.JPanel;
+import java.awt.Font;
+
 //snakes and ladders game
-public class Main{
+public class Main extends Canvas{
 
     public static void main(String[] args) {
+        JFrame frame = new JFrame("My Drawing");
+        Canvas canvas = new Main();
+        canvas.setSize(850, 850);
+        frame.add(canvas);
+        frame.pack();
+        frame.setVisible(true);
         Scanner in = new Scanner(System.in);
         //prints instructions
         System.out.println("Welcome to Snakes and Ladders");
@@ -24,7 +37,7 @@ public class Main{
             if(playernumstr.length() != 1 || playernumstr.charAt(0) < 48 || playernumstr.charAt(0) > 57){
                 playernum = 5;
             }
-            else {
+            else{
                 playernum = Integer.valueOf(playernumstr);
             }
         }
@@ -220,5 +233,77 @@ public class Main{
             }
         }
         return score;
+    }
+    //prints a visual non-interactive board
+    public void paint(Graphics g) {
+        Color gray  = new Color(230, 230, 230);
+        Color blue  = new Color(150, 200, 250);
+        Color black = new Color(0,0,0);
+        Color yellow = new Color(255, 214, 0);
+        Color red = new Color(255,0,0);
+        Color green = new Color(0,255,0);
+        g.setColor(gray);
+        g.fillRect(0, 0, 850, 850);
+        g.setColor(blue);
+        g.fillRect(50, 50, 125, 125);
+        g.fillRect(250, 50, 125, 125);
+        g.fillRect(650, 50, 125, 125);
+        g.fillRect(50, 250, 125, 125);
+        g.fillRect(250, 250, 125, 125);
+        g.fillRect(450, 250, 125, 125);
+        g.fillRect(650, 250, 125, 125);
+        g.fillRect(50, 450, 125, 125);
+        g.fillRect(250, 450, 125, 125);
+        g.fillRect(450, 450,125, 125);
+        g.fillRect(650, 450, 125, 125);
+        g.fillRect(50, 650, 125, 125);
+        g.fillRect(250, 650, 125, 125);
+        g.fillRect(450, 650, 125, 125);
+        g.fillRect(650, 650, 125, 125);
+        g.setColor(yellow);
+        g.fillRect(450, 50, 125, 125);
+        g.fillRect(650, 650, 125, 125);
+        g.setColor(black);
+        Font font = new Font("Arial", Font.BOLD, 36);
+        g.setFont(font);
+        g.drawString("16", 90, 125);
+        g.drawString("15",290, 125);
+        g.drawString("14",490, 125);
+        g.drawString("13",690, 125);
+        g.drawString("12",690, 325);
+        g.drawString("11",490, 325);
+        g.drawString("10",290, 325);
+        g.drawString("9", 100, 325);
+        g.drawString("8", 100, 525);
+        g.drawString("7", 300, 525);
+        g.drawString("6", 500, 525);
+        g.drawString("5", 700, 525);
+        g.drawString("4", 700, 725);
+        g.drawString("3", 500, 725);
+        g.drawString("2", 300, 725);
+        g.drawString("1", 100, 725);
+        g.setColor(yellow);
+        Font font2 = new Font("Arial", Font.TRUETYPE_FONT, 24);
+        g.setFont(font2);
+        g.drawString("1",  150, 80);
+        g.drawString("2", 350, 80);
+        g.drawString("1", 750, 80);
+        g.drawString("3", 750, 280);
+        g.drawString("2", 550, 280);
+        g.drawString("-1",150, 480);
+        g.drawString("3", 550, 480);
+        g.drawString("-1",750, 480);
+        g.drawString("1", 350, 680);
+        g.drawString("2", 150, 680);
+        g.setColor(red);
+        g.drawLine(290, 325, 125, 500);
+        g.drawLine(290, 320, 125, 495);
+        g.drawLine(335, 500, 685, 500);
+        g.drawLine(335, 495, 685, 495);
+        g.setColor(green);
+        g.drawLine(507, 690, 507, 540);
+        g.drawLine(512, 690, 512, 540);
+        g.drawLine(140, 290, 675, 290);
+        g.drawLine(140, 285, 675, 285);
     }
 }
