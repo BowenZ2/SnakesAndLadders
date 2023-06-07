@@ -3,16 +3,18 @@ import java.awt.Canvas;
 import java.awt.Graphics;
 import javax.swing.JFrame;
 import java.awt.Color;
-import javax.swing.JPanel;
 import java.awt.Font;
 
 //snakes and ladders game
 public class Main extends Canvas{
+    final static int maxchar = 10;
+    final static int tiles = 16;
+    final static int screensize = 850;
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("My Drawing");
         Canvas canvas = new Main();
-        canvas.setSize(850, 850);
+        canvas.setSize(screensize, screensize);
         frame.add(canvas);
         frame.pack();
         frame.setVisible(true);
@@ -20,11 +22,11 @@ public class Main extends Canvas{
         //prints instructions
         System.out.println("Welcome to Snakes and Ladders");
         System.out.println("\nINSTRUCTIONS");
-        System.out.println("1. There are 16 tiles in this game, 2 snakes, 2 ladders & 2 magical tiles");
+        System.out.println("1. There are " + tiles + " tiles in this game, 2 snakes, 2 ladders & 2 magical tiles");
         System.out.println("2. Each round you will click enter to roll the dice then you will move forward accordingly");
         System.out.println("3. Each no snake/ladder tiles will give you a certain amount of points");
         System.out.println("4. You may choose if you accept those points or not by typing yes or no, if you type no your next turn will be skipped");
-        System.out.println("5. When you reach tile 16, your turns are over and you must wait for the other players to finish");
+        System.out.println("5. When you reach tile " + tiles + ", your turns are over and you must wait for the other players to finish");
         System.out.println("6. The player with the most points by the end of the game wins");
         System.out.println("GOOD LUCK AND HAVE FUN!\n");
 
@@ -54,13 +56,17 @@ public class Main extends Canvas{
             skip[i] = 0;
             System.out.println("Player " + (i+1) + " enter your name: ");
             names[i] = in.next();
+            while(names[i].length() > maxchar){
+                System.out.println("Please enter a name less than 10 characters:");
+                names[i] = in.next();
+            }
         }
 
         //Players will take turn playing in this loop
         int finishedplayers = 0;
         for(int i = 0; i < playernum; i++){
             //checks that player hasn't finished
-            if(pos[i] < 16){
+            if(pos[i] < tiles){
                 //checking that they haven't skipped their turn
                 if(skip[i] == 0){
 
@@ -82,9 +88,9 @@ public class Main extends Canvas{
                     pos[i] = pos[i] + changeinpos(pos[i]);
 
                     //checking if player has finished
-                    if(pos[i] >= 16){
+                    if(pos[i] >= tiles){
                         System.out.println("You reached the finish line, your turns are over");
-                        pos[i] = 16;
+                        pos[i] = tiles;
                         finishedplayers++;
                     }
 
@@ -108,6 +114,9 @@ public class Main extends Canvas{
                             score[i] += points;
                         }
                     }
+                    else{
+                        score[i] += points;
+                    }
                 }
                 //If user skipped their turn, this allows them to continue playing after the skipped turn
                 else{
@@ -117,6 +126,10 @@ public class Main extends Canvas{
             }
             //restarting the loop
             if(i == playernum - 1){
+                System.out.println("\nCurrent Score Board:");
+                for(int k = 0; k < playernum; k++){
+                    System.out.println(names[k] + ": " + score[k]);
+                }
                 i = -1;
             }
             //checking if the game is over
@@ -160,8 +173,8 @@ public class Main extends Canvas{
     //checking for winner function
     public static int winner(int [] scores){
         int winner = 0;
-        int maxscore = -10000000;
-        for(int i = 0; i < scores.length; i++){
+        int maxscore = scores[0];
+        for(int i = 1; i < scores.length; i++){
             if(scores[i] > maxscore){
                 winner = i;
                 maxscore = scores[i];
